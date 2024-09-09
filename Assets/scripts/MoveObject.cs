@@ -4,16 +4,17 @@ using UnityEngine;
 
 public class MoveObject : MonoBehaviour
 {
-    // Start is called before the first frame update
-
-    public Vector3 newPosition;
     public float speed;
+    public float jumpsforce;
     public Vector2 inputVector;
+    public Rigidbody rigidBody;
+    public Vector3 velocity;
+    public float velocitymagnitude;
+    public bool CanJump;
     void Start()
     {
-        Debug.Log("game start");
-
-
+        rigidBody = GetComponent<Rigidbody>();
+        CanJump = true;
     }
 
     // Update is called once per frame
@@ -22,11 +23,21 @@ public class MoveObject : MonoBehaviour
         inputVector.x = Input.GetAxis("Horizontal");
         inputVector.y = Input.GetAxis("Vertical");
 
-        transform.Translate(inputVector.x * speed, 0f, inputVector.y * speed);
-        if (Input.GetKey(KeyCode.P))
+        rigidBody.AddForce(inputVector.x * speed, 0f, inputVector.y * speed, ForceMode.Impulse);
+
+        velocity = rigidBody.velocity;
+        velocitymagnitude = velocity.magnitude;
+        if (Input.GetKeyDown(KeyCode.Space) && CanJump)
         {
-            Debug.Log("key p press");
-            transform.position = newPosition;
+            rigidBody.AddForce(0f, jumpsforce, 0f, ForceMode.Impulse);
+            CanJump = false;
+        }
+    }
+    private void OnCollisionEnter(Collision contraloquechoca)
+    {
+        if (contraloquechoca.gameObject.tag == "piso")
+        {
+            CanJump = true;
         }
     }
 }
