@@ -1,6 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.SearchService;
 using UnityEngine;
+using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class MoveObject : MonoBehaviour
 {
@@ -11,6 +14,7 @@ public class MoveObject : MonoBehaviour
     public Vector3 velocity;
     public float velocitymagnitude;
     public bool CanJump;
+    public int points;
     void Start()
     {
         rigidBody = GetComponent<Rigidbody>();
@@ -33,11 +37,27 @@ public class MoveObject : MonoBehaviour
             CanJump = false;
         }
     }
-    private void OnCollisionEnter(Collision contraloquechoca)
+    private void OnCollisionEnter(Collision collision)
     {
-        if (contraloquechoca.gameObject.tag == "piso")
+        if (collision.gameObject.tag == "piso")
         {
             CanJump = true;
         }
+        if (collision.gameObject.CompareTag("dead"))
+        {
+            Debug.Log("killplayer");
+            SceneManager.LoadScene(0);
+        }
+        if (collision.gameObject.CompareTag("win"))
+        {
+            SceneManager.LoadScene(1);
+        }
+        if (collision.gameObject.CompareTag("items"))
+        {
+            Destroy(collision.gameObject);
+            points++;
+            scoretext.text = points.ToString();
+        }
     }
+    public TMPro.TextMeshProUGUI scoretext;
 }

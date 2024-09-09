@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class rigidbodymov : MonoBehaviour
 {
@@ -34,11 +35,19 @@ public class rigidbodymov : MonoBehaviour
             CanJump = false;
         }
     }
-    private void OnCollisionEnter(Collision contraloquechoca)
+    private void OnCollisionEnter(Collision collision)
     {
-       if (contraloquechoca.gameObject.CompareTag("piso"))
+       if (collision.gameObject.CompareTag("piso"))
         {
             CanJump = true;
+        }
+        if (collision.gameObject.CompareTag("dead"))
+        {
+            Debug.Log("killplayer");
+        }
+        if (collision.gameObject.CompareTag("win"))
+        {
+            SceneManager.LoadScene(1);
         }
     }
 }
