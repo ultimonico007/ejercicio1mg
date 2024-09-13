@@ -46,7 +46,7 @@ public class MoveObject : MonoBehaviour
         if (collision.gameObject.CompareTag("dead"))
         {
             Debug.Log("killplayer");
-            SceneManager.LoadScene(0);
+            SceneManager.LoadScene("DEATH");
         }
         if (collision.gameObject.CompareTag("win"))
         {
